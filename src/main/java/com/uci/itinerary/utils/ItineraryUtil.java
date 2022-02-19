@@ -23,10 +23,10 @@ public class ItineraryUtil {
         TimeUnit time = TimeUnit.DAYS; 
         long noOfDays = time.convert(diff, TimeUnit.MILLISECONDS);
 		
-		ArrayList<Place> placesList = (ArrayList<Place>) places.subList(0, (int) noOfDays*3+10); // Need to consider more places than the number of places in final itinerary
+		//ArrayList<Place> placesList = (ArrayList<Place>) places.subList(0, (int) noOfDays*3); // Need to consider more places than the number of places in final itinerary
 		
 		//Calculate routes
-		ArrayList<Route> routes = routePermute(placesList);
+		ArrayList<Route> routes = routePermute(places);
 		for (Route r : routes) {
 			r.setRatingScore(calculateRatingScore(r));
 			r.setDistanceScore(calculateDistanceScore(r));

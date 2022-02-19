@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.uci.itinerary.models.PlaceSearch;
+import com.uci.itinerary.models.DestinationPlaceDetails;
+import com.uci.itinerary.models.DistanceMatrix;
 import com.uci.itinerary.models.Place;
 import com.uci.itinerary.models.PlaceDetail;
 
@@ -23,12 +25,12 @@ public class ItineraryPlannerController {
 	
 	
 	@GetMapping("/api/plan")
-	public List<Place> getItineraryPlan(@RequestParam String placeName) {
+	public DestinationPlaceDetails getItineraryPlan(@RequestParam String placeName) {
 		
 		String pageToken = null;
+		DestinationPlaceDetails dpd = new DestinationPlaceDetails();
 		List<Place> places = new LinkedList<>();
-		
-		
+	
 		do {
 			//System.out.println(pageToken);
 			
@@ -46,7 +48,6 @@ public class ItineraryPlannerController {
 			
 		}while(pageToken != null);
 		
-		
 		Iterator<Place> iterator = places.iterator();
 		
 		while(iterator.hasNext()) {
@@ -54,6 +55,8 @@ public class ItineraryPlannerController {
 			if(place.getPermanently_closed() == true)
 				iterator.remove();
 		}
+		
+		places = places.subList(0, 10);
 		
 		for (Place place : places) {
 			if (place.getPlace_id() != null) {
@@ -63,6 +66,22 @@ public class ItineraryPlannerController {
 			}
 		}
 		
-		return places;
+		dpd.setPlaces(places);
+		
+		String distanceParam = new String();
+		for (int i = 0; i < places.size(); i++) {
+			if (i == places.size()-1) {
+				distanceParam =  distanceParam + "place_id:" + places.get(i).getPlace_id();
+				break;
+			} else {
+				distanceParam =  distanceParam + "place_id:" + places.get(i).getPlace_id() + "|";
+			}
+		}
+		
+		DistanceMatrix distanceMatrix;
+		distanceMatrix = restTemplate.getForObject("https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + distanceParam + "&destinations=" + distanceParam + "&key=Your_API_Key", DistanceMatrix.class);
+		dpd.setDistanceMatrix(distanceMatrix);
+		
+		return dpd;
 	}
 }
