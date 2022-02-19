@@ -1,4 +1,4 @@
-package com.uci.itinerary;
+package com.uci.itinerary.models;
 
 import java.util.ArrayList;
 

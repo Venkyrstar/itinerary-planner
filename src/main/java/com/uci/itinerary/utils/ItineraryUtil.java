@@ -1,4 +1,4 @@
-package com.uci.itinerary;
+package com.uci.itinerary.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,16 +9,23 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import com.uci.itinerary.models.Itinerary;
+import com.uci.itinerary.models.Place;
+import com.uci.itinerary.models.Route;
+
 public class ItineraryUtil {
 	public ArrayList<Itinerary> itineraryAlgo(ArrayList<Place> places, Date fromDate, Date toDate) {
 		Collections.sort(places, Collections.reverseOrder()); // based on rating
 		
+		//calculating noOfDays
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
         long diff = toDate.getTime() - fromDate.getTime();
         TimeUnit time = TimeUnit.DAYS; 
         long noOfDays = time.convert(diff, TimeUnit.MILLISECONDS);
 		
 		ArrayList<Place> placesList = (ArrayList<Place>) places.subList(0, (int) noOfDays*3+10); // Need to consider more places than the number of places in final itinerary
+		
+		//Calculate routes
 		ArrayList<Route> routes = routePermute(placesList);
 		for (Route r : routes) {
 			r.setRatingScore(calculateRatingScore(r));
@@ -26,6 +33,8 @@ public class ItineraryUtil {
 			r.setProfitScore(calculateProfitScore(r));
 		}
 		Collections.sort(routes, Collections.reverseOrder()); // based on profit score
+		
+		//Prepare Itinerary
 		ArrayList<Itinerary> itinerary = prepareItinerary(routes, toDate, fromDate, noOfDays); 
 		return itinerary;
 	}

@@ -1,4 +1,4 @@
-package com.uci.itinerary;
+package com.uci.itinerary.models;
 
 import java.util.Date;
 
@@ -8,7 +8,7 @@ public class Itinerary {
 	private Route route;
 
 	public Itinerary() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public Itinerary(Date date, Route route) {
