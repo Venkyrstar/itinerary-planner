@@ -5,7 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties
-public class Place {
+public class Place implements Comparable<Place> {
 
 	private String place_id;
 	private String name;
@@ -84,5 +84,10 @@ public class Place {
 	public void setTypes(List<String> types) {
 		this.types = types;
 	}
+	
+	@Override
+    public int compareTo(Place place) {
+        return Float.compare(this.rating, place.rating);
+    }
 	
 }

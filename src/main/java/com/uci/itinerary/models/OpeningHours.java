@@ -5,6 +5,7 @@ import java.util.List;
 public class OpeningHours {
 	
 	private boolean open_now;
+	private List<Period> periods;
 	private List<String> weekday_text;
 
 	public boolean getOpen_now() {
@@ -13,6 +14,14 @@ public class OpeningHours {
 
 	public void setOpen_now(boolean open_now) {
 		this.open_now = open_now;
+	}
+
+	public List<Period> getPeriods() {
+		return periods;
+	}
+
+	public void setPeriods(List<Period> periods) {
+		this.periods = periods;
 	}
 
 	public List<String> getWeekday_text() {

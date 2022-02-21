@@ -1,5 +1,6 @@
 package com.uci.itinerary.controllers;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,9 +53,11 @@ public class ItineraryPlannerController {
 		
 		while(iterator.hasNext()) {
 			Place place = iterator.next();
-			if(place.getPermanently_closed() == true)
+			if(place.getPermanently_closed() == true || place.getOpening_hours() == null)
 				iterator.remove();
 		}
+		
+		Collections.sort(places, Collections.reverseOrder());
 		
 		places = places.subList(0, 10);
 		
