@@ -3,7 +3,7 @@ package com.uci.itinerary.models;
 public class TextValue {
 	
 	private String text;
-	private long value;
+	private double value;
 	
 	public String getText() {
 		return text;
@@ -11,10 +11,10 @@ public class TextValue {
 	public void setText(String text) {
 		this.text = text;
 	}
-	public long getValue() {
+	public double getValue() {
 		return value;
 	}
-	public void setValue(long value) {
+	public void setValue(double value) {
 		this.value = value;
 	}
 	

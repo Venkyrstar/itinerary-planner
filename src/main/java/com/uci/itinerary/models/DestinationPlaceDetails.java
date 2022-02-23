@@ -8,7 +8,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class DestinationPlaceDetails {
 	
 	private List<Place> places;
-	private DistanceMatrix distanceMatrix;
+	private List<List<Metrics>> matrix;
+	private String status;
+	private String errorMessage;
 	
 	public DestinationPlaceDetails() {
 		
@@ -19,11 +21,23 @@ public class DestinationPlaceDetails {
 	public void setPlaces(List<Place> places) {
 		this.places = places;
 	}
-	public DistanceMatrix getDistanceMatrix() {
-		return distanceMatrix;
+	public List<List<Metrics>> getMatrix() {
+		return matrix;
 	}
-	public void setDistanceMatrix(DistanceMatrix distanceMatrix) {
-		this.distanceMatrix = distanceMatrix;
+	public void setMatrix(List<List<Metrics>> matrix) {
+		this.matrix = matrix;
+	}
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }
