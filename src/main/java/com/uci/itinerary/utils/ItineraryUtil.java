@@ -16,32 +16,49 @@ import com.uci.itinerary.models.Route;
 public class ItineraryUtil {
 	public ArrayList<Itinerary> itineraryAlgo(ArrayList<Place> places, Date fromDate, Date toDate) {
 		Collections.sort(places, Collections.reverseOrder()); // based on rating
-		
-		//calculating noOfDays
+
+		// calculating noOfDays
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
-        long diff = toDate.getTime() - fromDate.getTime();
-        TimeUnit time = TimeUnit.DAYS; 
-        long noOfDays = time.convert(diff, TimeUnit.MILLISECONDS);
-		
-		//ArrayList<Place> placesList = (ArrayList<Place>) places.subList(0, (int) noOfDays*3); // Need to consider more places than the number of places in final itinerary
-		
-		//Calculate routes
-		ArrayList<Route> routes = routePermute(places);
+		long diff = toDate.getTime() - fromDate.getTime();
+		TimeUnit time = TimeUnit.DAYS;
+		long noOfDays = time.convert(diff, TimeUnit.MILLISECONDS);
+
+		// ArrayList<Place> placesList = (ArrayList<Place>) places.subList(0, (int)
+		// noOfDays*3); // Need to consider more places than the number of places in
+		// final itinerary
+
+		// Calculate routes
+		ArrayList<ArrayList<Integer>> permuteRoutes = new ArrayList<ArrayList<Integer>>();
+		routePermute(permuteRoutes, new ArrayList<>(), places.size(), 3);
+
+		ArrayList<Route> routes = new ArrayList<Route>();
+
+		for (int i = 0; i < permuteRoutes.size(); ++i) {
+			Route r = new Route();
+			ArrayList<Place> p = new ArrayList<Place>();
+			for (int j = 0; j < permuteRoutes.get(i).size(); ++j) {
+				p.add(places.get(permuteRoutes.get(i).get(j)));
+			}
+			r.setPlaces(p);
+			routes.add(r);
+		}
+
 		for (Route r : routes) {
 			r.setRatingScore(calculateRatingScore(r));
 			r.setDistanceScore(calculateDistanceScore(r));
 			r.setProfitScore(calculateProfitScore(r));
 		}
 		Collections.sort(routes, Collections.reverseOrder()); // based on profit score
-		
-		//Prepare Itinerary
-		ArrayList<Itinerary> itinerary = prepareItinerary(routes, toDate, fromDate, noOfDays); 
+
+		// Prepare Itinerary
+		ArrayList<Itinerary> itinerary = prepareItinerary(routes, toDate, fromDate, noOfDays);
 		return itinerary;
 	}
+
 	public ArrayList<Itinerary> prepareItinerary(ArrayList<Route> routes, Date toDate, Date fromDate, long noOfDays) {
 		HashMap<Place, Boolean> visited = new HashMap<>();
 		Date currDate = fromDate;
-		ArrayList<Itinerary> itinerary = new ArrayList<Itinerary>(); 
+		ArrayList<Itinerary> itinerary = new ArrayList<Itinerary>();
 		for (Route r : routes) {
 			boolean isValid = true;
 			for (Place p : r.getPlaces()) {
@@ -49,15 +66,15 @@ public class ItineraryUtil {
 					isValid = false;
 					break;
 				} else {
-					visited.put(p,true);
+					visited.put(p, true);
 				}
 			}
 			if (isValid) {
 				itinerary.add(new Itinerary(currDate, r));
 				Calendar c = Calendar.getInstance();
-		        c.setTime(currDate);
-		        c.add(Calendar.DATE, 1);
-		        currDate = c.getTime();
+				c.setTime(currDate);
+				c.add(Calendar.DATE, 1);
+				currDate = c.getTime();
 				noOfDays--;
 			}
 			if (noOfDays == 0) {
@@ -66,24 +83,36 @@ public class ItineraryUtil {
 		}
 		return itinerary;
 	}
-	
-	public ArrayList<Route> routePermute(ArrayList<Place> placesList) {
-		return null;
-		
+
+	public void routePermute(ArrayList<ArrayList<Integer>> list, ArrayList<Integer> tempList, int placesCount,
+			int permutationSize) {
+		if (tempList.size() == permutationSize) {
+			list.add(new ArrayList<>(tempList));
+			// System.out.println(list.get(list.size() - 1));
+		} else {
+			for (int i = 0; i < placesCount; ++i) {
+				if (tempList.contains(i))
+					continue;
+				tempList.add(i);
+				routePermute(list, tempList, placesCount, permutationSize);
+				tempList.remove(tempList.size() - 1);
+			}
+		}
+
 	}
-	
+
 	public double calculateRatingScore(Route r) {
 		return 0;
-		
+
 	}
-	
+
 	public double calculateDistanceScore(Route r) {
 		return 0;
-		
+
 	}
-	
+
 	public double calculateProfitScore(Route r) {
 		return 0;
-		
+
 	}
 }
