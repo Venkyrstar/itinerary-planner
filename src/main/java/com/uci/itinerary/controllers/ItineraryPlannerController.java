@@ -45,10 +45,10 @@ public class ItineraryPlannerController {
 			do {
 				PlaceSearch placeSearch;				
 				if(pageToken == null) {
-					placeSearch = restTemplate.getForObject("https://maps.googleapis.com/maps/api/place/textsearch/json?query={name}&key={key}", PlaceSearch.class, "tourist spots in " + placeName , "AIzaSyB69cF4azWr4lh7-5Gr-iE9QhTdOIRIQQI");
+					placeSearch = restTemplate.getForObject("https://maps.googleapis.com/maps/api/place/textsearch/json?query={name}&key={key}", PlaceSearch.class, "tourist spots in " + placeName , "API_KEY");
 				}
 				else {
-					placeSearch = restTemplate.getForObject("https://maps.googleapis.com/maps/api/place/textsearch/json?pagetoken=" + pageToken + "&key=AIzaSyB69cF4azWr4lh7-5Gr-iE9QhTdOIRIQQI", PlaceSearch.class);			
+					placeSearch = restTemplate.getForObject("https://maps.googleapis.com/maps/api/place/textsearch/json?pagetoken=" + pageToken + "&key=API_KEY", PlaceSearch.class);			
 				}
 				places.addAll(placeSearch.getResults());
 				pageToken = placeSearch.getNextPageToken();
@@ -70,7 +70,7 @@ public class ItineraryPlannerController {
 			for (Place place : places) {
 				if (place.getPlace_id() != null) {
 					PlaceDetail placeDetail;
-					placeDetail = restTemplate.getForObject("https://maps.googleapis.com/maps/api/place/details/json?fields=opening_hours" + "&place_id=" + place.getPlace_id() + "&key=AIzaSyB69cF4azWr4lh7-5Gr-iE9QhTdOIRIQQI", PlaceDetail.class);
+					placeDetail = restTemplate.getForObject("https://maps.googleapis.com/maps/api/place/details/json?fields=opening_hours" + "&place_id=" + place.getPlace_id() + "&key=API_KEY", PlaceDetail.class);
 					place.setOpening_hours(placeDetail.getResult().getOpening_hours());
 				}
 			}
@@ -88,7 +88,7 @@ public class ItineraryPlannerController {
 			}
 			
 			DistanceMatrix distanceMatrix;
-			distanceMatrix = restTemplate.getForObject("https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + distanceParam + "&destinations=" + distanceParam + "&key=AIzaSyB69cF4azWr4lh7-5Gr-iE9QhTdOIRIQQI", DistanceMatrix.class);
+			distanceMatrix = restTemplate.getForObject("https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + distanceParam + "&destinations=" + distanceParam + "&key=API_KEY", DistanceMatrix.class);
 			
 			List<List<Metrics>> matrix = new ArrayList<>();
 			
