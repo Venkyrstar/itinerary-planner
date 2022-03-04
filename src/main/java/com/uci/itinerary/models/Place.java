@@ -2,21 +2,21 @@ package com.uci.itinerary.models;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
-@JsonIgnoreProperties
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Place implements Comparable<Place> {
 
 	private String place_id;
 	private String name;
 	private String formatted_address;
-	private Geometry geometry;
 	private float rating;
 	private long user_ratings_total;
 	private OpeningHours opening_hours;
 	private String business_status;
 	private boolean permanently_closed;
 	private List<String> types;
+	private List<List<Interval>> timings;
 	
 	
 	public boolean getPermanently_closed() {
@@ -61,13 +61,6 @@ public class Place implements Comparable<Place> {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Geometry getGeometry() {
-		return geometry;
-	}
-
-	public void setGeometry(Geometry geometry) {
-		this.geometry = geometry;
-	}
 
 	public OpeningHours getOpening_hours() {
 		return opening_hours;
@@ -83,6 +76,13 @@ public class Place implements Comparable<Place> {
 
 	public void setTypes(List<String> types) {
 		this.types = types;
+	}
+	
+	public List<List<Interval>> getTimings() {
+		return timings;
+	}
+	public void setTimings(List<List<Interval>> times) {
+		this.timings = times;
 	}
 	
 	@Override
